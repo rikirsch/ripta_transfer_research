@@ -1,21 +1,14 @@
 #This is where I will calculate the number of possible transfers for each stop,
 #on each route, at each time, on each day of the week.
 
-#NOTES: 
-# I will need to figure out how to clean the Scheduled.Time to add on the specified_window 
-
-# How am I storing this output? --> dataframe: cols - route num, stop.sequence, stop loc, stop time, number of possible transfers
-  
-# Am I using too many for loops? --> can change away from for loops if it is taking too long,
-#but I don't need to start out w lapply or anything like that for the purposes of the final
-
 #' Calculate number of possible transfers on the given day for the given route
 #'@description a function to find the number of transfers at each stop along a route
 #'@param df_by_day dataframe, one day of RIPTA arrival data
 #'@param route_num double, the route of interest/to find transfers from
 #'@param window_transfer double, the window of waiting for a transfer in minutes,
 #'  default 15 minutes
-
+#'@return num_transfers_df dataframe with cols:
+#'  route num, stop.sequence, stop loc, stop time, number of possible transfers
 
 route_transfers <- function(df_by_day, route_num, window_transfer = 15){
   #for each stop on the specified route in the stop.sequence
@@ -60,4 +53,8 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
 #later issues:
   #How do I plot this
   #How do I add in the estimated/average arrival times
+
+#NOTES: 
+# Am I using too many for loops? --> can change away from for loops if it is taking too long,
+#but I don't need to start out w lapply or anything like that for the purposes of the final
 
