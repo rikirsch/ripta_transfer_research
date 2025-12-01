@@ -11,8 +11,13 @@
 #'  route num, stop.sequence, stop loc, stop time, number of possible transfers
 
 route_transfers <- function(df_by_day, route_num, window_transfer = 15){
+  res_df <- df_by_day %>%
+    group_by(Route, Stop, Scheduled.Time) %>%
+    summarise(num_transfers = 0)
+  
   #for each stop on the specified route in the stop.sequence
-  for(s in df_by_day[df_by_day$Route == route_num, df_by_day$Stop.Sequence]){
+  for(s in df_by_day[df_by_day$Route == route_num, df_by_day$Stop.Sequence]){ #This is not how to index?
+    cur_stop <- df_by_day[df_by_day$Route == route_num, df_by_day$Stop.Sequence == s] #This is not how to index?
     #if it is not the first stop
     if(s != 1){
       #find the goal bus stop (station that you are looking to see if other routes come here)
@@ -23,6 +28,26 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
       
       #for each route in the data
       for(r in unique(df_by_day$Route)){
+        temp_df <- df_by_day %>%
+        filter(Route == goal_stop, 
+                Scheduled.Time <= goal_scheduled_time + minutes(window_transfer) |
+                Scheduled.Time >= goal_scheduled_time - minutes(window_transfer))
+        if(is.na(temp_df)){
+          num_temp_transfers <- 0
+        }
+        else{
+          num_temp_transfers <- length(temp_df$Route)
+          #this only runs if the number of transfers isn't 0,
+          #if there are 0 transfers then the length of the filtered df will = 0,
+          #so there is no need to update the df that was initialized with 0s
+          df_by_day %>%
+            filter(Route == goal_stop, 
+                   Scheduled.Time <= goal_scheduled_time + minutes(window_transfer) |
+                     Scheduled.Time >= goal_scheduled_time - minutes(window_transfer)) %>%
+            mutate(num_transfers = num_temp_transfers)
+        }
+        
+
         #if the stop on this route is the goal_stop 
         #and the scheduled time on this route is within the specified window of
         #the goal_scheduled time
@@ -43,11 +68,11 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
         #instead of doing the if statement, try summing where this is true:
         #this will find the number of places that this is true 
         #(the stop matches the goal stop and the time is within the transfer window)
-        sum(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
-            df_by_day$Scheduled.Time[df_by_day$Route == r] <=
-            goal_scheduled_time + minutes(window_transfer) &
-            df_by_day$Scheduled.Time[df_by_day$Route == r] >=
-            goal_scheduled_time - minutes(window_transfer))
+        # sum(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
+        #     df_by_day$Scheduled.Time[df_by_day$Route == r] <=
+        #     goal_scheduled_time + minutes(window_transfer) &
+        #     df_by_day$Scheduled.Time[df_by_day$Route == r] >=
+        #     goal_scheduled_time - minutes(window_transfer))
       }
     }
   }
@@ -62,7 +87,10 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
  # "%Y-%m-%d %H:%M:%S"
  # - use the minute function to add or subtract the window in this script
 # 3. How do I check for the possible transfers/am I checking the indexing right?
+ # - use the filter! how you store it will decide how the indexing works (?)
 # 4. How do I store the number of transfers?
+ # - group by the variables of interest and then summarize, 
+ # then calculate the number of transfers by finding the length of the filtered df
 
 #later issues:
   #How do I plot this
@@ -71,4 +99,8 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
 #NOTES: 
 # Am I using too many for loops? --> can change away from for loops if it is taking too long,
 #but I don't need to start out w lapply or anything like that for the purposes of the final
+
+#CURRENT LEADING ISSUES:
+#' I am getting an error that "undefined columns selected", I think this is from how I am indexing the df
+#' I need to ensure that I am indexing the column the correct way and not trying to index the rows twices
 
