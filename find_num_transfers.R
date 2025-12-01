@@ -2,12 +2,21 @@
 #on each route, at each time, on each day of the week.
 
 #NOTES: 
-  # I will need to figure out how to clean the Scheduled.Time to add on the specified_window 
-  # How am I storing this data?
-  # Am I using too many for loops? Can I do this with vectorized functions?
+# I will need to figure out how to clean the Scheduled.Time to add on the specified_window 
+
+# How am I storing this output? --> dataframe: cols - route num, stop.sequence, stop loc, stop time, number of possible transfers
+  
+# Am I using too many for loops? --> can change away from for loops if it is taking too long,
+#but I don't need to start out w lapply or anything like that for the purposes of the final
+
+#' Calculate number of possible transfers on the given day for the given route
+#'@description a function to find the number of transfers at each stop along a route
+#'@param df_by_day dataframe, one day of RIPTA arrival data
+#'@param route_num double, the route of interest/to find transfers from
+#'@param window_transfer double, the window of waiting for a transfer in minutes,
+#'  default 15 minutes
 
 
-#a function to find the number of transfers at each stop along a specified route on a specified day
 route_transfers <- function(df_by_day, route_num, window_transfer = 15){
   #for each stop on the specified route in the stop.sequence
   for(s in df_by_day[df_by_day$Route == route_num, df_by_day$Stop.Sequence]){
@@ -22,7 +31,9 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
       #for each route in the data
       for(r in unique(df_by_day$Route)){
         #if the stop on this route is the goal_stop 
-        #and the scheduled time on this route is within the specified window of the goal_scheduled time
+        #and the scheduled time on this route is within the specified window of
+        #the goal_scheduled time
+        #QUESTION: do I need to check that these are happening at the same index?
         if(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
            df_by_day$Scheduled.Time[df_by_day$Route == r] <=
               goal_scheduled_time + window_transfer &
@@ -37,3 +48,16 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
     }
   }
 }
+
+
+#Steps:
+# 1. How do I find days of the week?
+  # - I don't need to worry about this yet, I can just filter by one date and try this on the one date first
+# 2. How do I add the transfer time window to the current format of time?
+# 3. How do I check for the possible transfers/am I checking the indexing right?
+# 4. How do I store the number of transfers?
+
+#later issues:
+  #How do I plot this
+  #How do I add in the estimated/average arrival times
+
