@@ -27,16 +27,27 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
         #and the scheduled time on this route is within the specified window of
         #the goal_scheduled time
         #QUESTION: do I need to check that these are happening at the same index?
-        if(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
-           df_by_day$Scheduled.Time[df_by_day$Route == r] <=
-              goal_scheduled_time + window_transfer &
-           df_by_day$Scheduled.Time[df_by_day$Route == r] >=
-              goal_scheduled_time - window_transfer){
-          #add (?) to the count for the number of transfers at route route_num at stop.sequence s on the specified day
-          #instead of adding one each time the if statement is true,
-          #use the fact that it's vectorized and add the num TRUE of the if statements
-          #(which is the number of possible transfers for the given route/stop/time)
-        }
+        
+        #uncomment the below chunk to resume working on the if statement
+        # if(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
+        #    df_by_day$Scheduled.Time[df_by_day$Route == r] <=
+        #       goal_scheduled_time + minutes(window_transfer) &
+        #    df_by_day$Scheduled.Time[df_by_day$Route == r] >=
+        #       goal_scheduled_time - minutes(window_transfer)){
+        #   #add (?) to the count for the number of transfers at route route_num at stop.sequence s on the specified day
+        #   #instead of adding one each time the if statement is true,
+        #   #use the fact that it's vectorized and add the num TRUE of the if statements
+        #   #(which is the number of possible transfers for the given route/stop/time)
+        # }
+        
+        #instead of doing the if statement, try summing where this is true:
+        #this will find the number of places that this is true 
+        #(the stop matches the goal stop and the time is within the transfer window)
+        sum(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
+            df_by_day$Scheduled.Time[df_by_day$Route == r] <=
+            goal_scheduled_time + minutes(window_transfer) &
+            df_by_day$Scheduled.Time[df_by_day$Route == r] >=
+            goal_scheduled_time - minutes(window_transfer))
       }
     }
   }
@@ -47,6 +58,9 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
 # 1. How do I find days of the week?
   # - I don't need to worry about this yet, I can just filter by one date and try this on the one date first
 # 2. How do I add the transfer time window to the current format of time?
+ # - Clean data first to mutate scheduled time to be in date time with format
+ # "%Y-%m-%d %H:%M:%S"
+ # - use the minute function to add or subtract the window in this script
 # 3. How do I check for the possible transfers/am I checking the indexing right?
 # 4. How do I store the number of transfers?
 
