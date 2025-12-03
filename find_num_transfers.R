@@ -21,7 +21,7 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
   route_df <- df_by_day[df_by_day$Route == route_num, ]
  
   #for each stop on the specified route (other than the first stop where people won't transfer from)
-  for(cur_stop in 2:length(route_df)){ 
+  for(cur_stop in 2:length(route_df$Route)){ 
     cur_run <- route_df[cur_stop, ] #find the full current run
     
     #find the goal bus stop (station that you are looking to see if other routes come here)
@@ -88,6 +88,10 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
 #but I don't need to start out w lapply or anything like that for the purposes of the final
 
 #CURRENT LEADING ISSUES:
-# I don't think it's storing the correct number of tansfers, is this an issue in how I'm grouping?
-# Why does only one kepl row have all the transfer data? 
-# 
+#Ready to think about how this is answering a question now that I can find the number of transfers for 
+#each stop and time for the given route/day
+
+#possible next steps:
+# break the current code into more functions and use lapply 
+# plot the number of transfers in a visual way
+# find the average rates for each day of the week
