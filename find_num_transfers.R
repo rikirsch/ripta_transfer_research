@@ -11,71 +11,57 @@
 #'  route num, stop.sequence, stop loc, stop time, number of possible transfers
 
 route_transfers <- function(df_by_day, route_num, window_transfer = 15){
+  #set up the results df
   res_df <- df_by_day %>%
-    group_by(Route, Stop, Scheduled.Time) %>%
-    summarise(num_transfers = 0)
+    filter(Route == route_num) %>%
+    select(c(Date, Route, Stop, Stop.Sequence, Scheduled.Time)) %>%
+    mutate(num_transfers = 0)
   
-  #for each stop on the specified route in the stop.sequence
-  for(s in df_by_day[df_by_day$Route == route_num, df_by_day$Stop.Sequence]){ #This is not how to index?
-    cur_stop <- df_by_day[df_by_day$Route == route_num, df_by_day$Stop.Sequence == s] #This is not how to index?
-    #if it is not the first stop
-    if(s != 1){
-      #find the goal bus stop (station that you are looking to see if other routes come here)
-      goal_stop <- df_by_day[df_by_day$Route == route_num,
-                             df_by_day$Stop.Sequence == s]
-      #find the goal scheduled time (time you are looking to see if other routes come here)
-      goal_scheduled_time <- df_by_day$Scheduled.Time[which(goal_stop)]
-      
-      #for each route in the data
-      for(r in unique(df_by_day$Route)){
-        temp_df <- df_by_day %>%
-        filter(Route == goal_stop, 
-                Scheduled.Time <= goal_scheduled_time + minutes(window_transfer) |
-                Scheduled.Time >= goal_scheduled_time - minutes(window_transfer))
-        if(is.na(temp_df)){
-          num_temp_transfers <- 0
-        }
-        else{
-          num_temp_transfers <- length(temp_df$Route)
-          #this only runs if the number of transfers isn't 0,
-          #if there are 0 transfers then the length of the filtered df will = 0,
-          #so there is no need to update the df that was initialized with 0s
-          df_by_day %>%
-            filter(Route == goal_stop, 
-                   Scheduled.Time <= goal_scheduled_time + minutes(window_transfer) |
-                     Scheduled.Time >= goal_scheduled_time - minutes(window_transfer)) %>%
-            mutate(num_transfers = num_temp_transfers)
-        }
-        
+  #subset the route on the given day
+  route_df <- df_by_day[df_by_day$Route == route_num, ]
+ 
+  #for each stop on the specified route (other than the first stop where people won't transfer from)
+  for(cur_stop in 2:length(route_df)){ 
+    cur_run <- route_df[cur_stop, ] #find the full current run
+    
+    #find the goal bus stop (station that you are looking to see if other routes come here)
+    goal_stop <- route_df[cur_stop, ]$Stop
 
-        #if the stop on this route is the goal_stop 
+    #find the goal scheduled time (time you are looking to see if other routes come here)
+    goal_scheduled_time <- route_df[cur_stop, ]$Scheduled.Time
+      
+    #for each route in the data
+    for(r in unique(df_by_day$Route)){
+      temp_df <- df_by_day %>%
+        #if the stop is on a different route and at the goal_stop 
         #and the scheduled time on this route is within the specified window of
-        #the goal_scheduled time
-        #QUESTION: do I need to check that these are happening at the same index?
-        
-        #uncomment the below chunk to resume working on the if statement
-        # if(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
-        #    df_by_day$Scheduled.Time[df_by_day$Route == r] <=
-        #       goal_scheduled_time + minutes(window_transfer) &
-        #    df_by_day$Scheduled.Time[df_by_day$Route == r] >=
-        #       goal_scheduled_time - minutes(window_transfer)){
-        #   #add (?) to the count for the number of transfers at route route_num at stop.sequence s on the specified day
-        #   #instead of adding one each time the if statement is true,
-        #   #use the fact that it's vectorized and add the num TRUE of the if statements
-        #   #(which is the number of possible transfers for the given route/stop/time)
-        # }
-        
-        #instead of doing the if statement, try summing where this is true:
-        #this will find the number of places that this is true 
-        #(the stop matches the goal stop and the time is within the transfer window)
-        # sum(df_by_day$stop[df_by_day$Route == r] == goal_stop & 
-        #     df_by_day$Scheduled.Time[df_by_day$Route == r] <=
-        #     goal_scheduled_time + minutes(window_transfer) &
-        #     df_by_day$Scheduled.Time[df_by_day$Route == r] >=
-        #     goal_scheduled_time - minutes(window_transfer))
+        #the goal_scheduled time, store these rows in a temporary data frame
+      filter(Route != route_num,
+              Stop == goal_stop, 
+              Scheduled.Time <= goal_scheduled_time + minutes(window_transfer),
+              Scheduled.Time >= goal_scheduled_time - minutes(window_transfer))
+      
+      #If the temporary data frame is null, then there are no transfers at this stop, time, and day
+      if(is.null(temp_df$Route)){
+        num_temp_transfers <- 0
       }
+      
+      #update the number of transfers to the number of observations in the temporary data frame
+      else{
+        num_temp_transfers <- length(temp_df$Route)
+      }
+      
+      #update the number of transfers for the given route, stop, and time 
+      #(which is specified in cur_run)
+      res_df <- res_df %>%
+        mutate(num_transfers = 
+                 case_when((Route == cur_run$Route[1]) &
+                           (Stop == cur_run$Stop[1]) &
+                           (Scheduled.Time == cur_run$Scheduled.Time[1]) ~ num_temp_transfers,
+                           TRUE ~ num_transfers))
     }
   }
+  return(res_df)
 }
 
 
@@ -92,6 +78,7 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
  # - group by the variables of interest and then summarize, 
  # then calculate the number of transfers by finding the length of the filtered df
 
+
 #later issues:
   #How do I plot this
   #How do I add in the estimated/average arrival times
@@ -101,6 +88,6 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15){
 #but I don't need to start out w lapply or anything like that for the purposes of the final
 
 #CURRENT LEADING ISSUES:
-#' I am getting an error that "undefined columns selected", I think this is from how I am indexing the df
-#' I need to ensure that I am indexing the column the correct way and not trying to index the rows twices
-
+# I don't think it's storing the correct number of tansfers, is this an issue in how I'm grouping?
+# Why does only one kepl row have all the transfer data? 
+# 

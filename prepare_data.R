@@ -17,4 +17,7 @@ otp_df[1, "Scheduled.Time"]
 otp_df[1, "Scheduled.Time"] + minutes(15)
 
 one_day_ripta <- filter(otp_df, Date == "2024-05-01" )
-route_transfers(one_day_ripta, route_num = 10)
+resulting_df <- route_transfers(one_day_ripta, route_num = 10)
+
+#to store just the route that you ran the function on
+resulting_df_10 <- resulting_df
