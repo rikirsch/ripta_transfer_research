@@ -13,7 +13,9 @@ sched_otp_df <- clean_data(otp_df, "Scheduled.Time", "2024-05-01")
 sched_resulting_df <- route_transfers(sched_otp_df, route_num = 10, from = FALSE)
 
 #trying to run the cleaning function on a day of the week
-act_mon_df <- clean_data(otp_df, "Scheduled.Time", "Monday")
+sched_mon_df <- clean_data(otp_df, "Scheduled.Time", "Monday")
+
+act_mon_df <- clean_data(otp_df, "Actual.Arrival.Time", "Monday")
 
   #THEN! I should create a new function called avg arrival time that will calculate
   # the avg_arrival_time for the given Date(s)
