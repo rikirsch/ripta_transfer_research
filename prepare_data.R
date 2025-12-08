@@ -19,10 +19,15 @@ clean_data <- function(full_data, type_of_time, day){
     mutate(Date = as.Date(Date),
            Weekday = weekdays.Date(Date),
            type_of_time = as.POSIXct(eval(as.name(type_of_time)), format = "%Y-%m-%d %H:%M:%S", tz = "EST"),
-           Time = type_of_time) %>%
-    ifelse(day %in% c(Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday),
-           filter(Weekday == day),
-           filter(Date == day)) %>%
+           Time = type_of_time)
+    if(day %in% c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")){
+      cleaned_data <- cleaned_data %>%
+        filter(Weekday == day)
+    } else{
+      cleaned_data <- cleaned_data %>%
+        filter(Date == day)
+    }
+  cleaned_data <- cleaned_data %>%
     select(c(Date, Route, Stop, Stop.Sequence, Time))
   return(cleaned_data)
 }

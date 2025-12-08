@@ -18,7 +18,7 @@ sched_resulting_df <- route_transfers(sched_otp_df, route_num = 10, from = FALSE
 # otp_df <- otp_df %>%
 #   mutate(Date = as.Date(Date), #this can and probably should happen in the data cleaning function
 #          Weekday = weekdays.Date(Date))  #this can and probably should happen in the data cleaning function
-act_mon_df <- clean_data(otp_df, "Scheduled.Time", Monday)
+act_mon_df <- clean_data(otp_df, "Scheduled.Time", "Monday")
 
 #I need to think about this more big picture/with my next steps in mind:
   # In the data cleaning function, I want it to filter to the selected Date(s)
