@@ -28,6 +28,12 @@ clean_data <- function(full_data, type_of_time, day){
         filter(Date == day)
     }
   cleaned_data <- cleaned_data %>%
-    select(c(Date, Route, Stop, Stop.Sequence, Time))
+    select(c(Date, Route, Stop, Stop.Sequence, Time)) 
+
+  #Here is where I want to call a function to find the avg arrival times of each route and stop
+  #I will decide if I want this to be in this function or outside of this function
+  #it might just be a few lines of summarizing/grouping/mutating, 
+  #but I want to do it here so that the returned data has the Time col as the avg time
+  
   return(cleaned_data)
 }
