@@ -21,17 +21,3 @@ clean_data <- function(full_data, type_of_time, day){
     select(c(Date, Route, Stop, Stop.Sequence, Time))
   return(cleaned_data)
 }
-  
-
-
-actual_otp_df <- clean_data(read.csv('/Users/rachelkirsch/Downloads/1560FinalProject/otp_simulated.csv'),
-                       Actual.Arrival.Time,
-                       "2024-05-01")
-    
-act_resulting_df <- route_transfers(actual_otp_df, route_num = 10, from = FALSE)
-
-
-sched_otp_df <- clean_data(read.csv('/Users/rachelkirsch/Downloads/1560FinalProject/otp_simulated.csv'),
-                           Scheduled.Time,
-                           "2024-05-01")
-sched_resulting_df <- route_transfers(sched_otp_df, route_num = 10, from = FALSE)
