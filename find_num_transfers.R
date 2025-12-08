@@ -110,10 +110,13 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
 #but I don't need to start out w lapply or anything like that for the purposes of the final
 
 #CURRENT LEADING ISSUES:
-#once I finish that I'll calculate the avg time per day of the week function
-  # - this will require not filtering by date in the data cleaning func/
-  # maybe there's a way to subset by day of the week which would be great but
-  # if not I'll have to filter it out outside of the data cleaning func anyways
+#THEN! I should create a new function called avg arrival time that will calculate
+# the avg_arrival_time for the given Date(s)
+#if only one date is given, then the avg will be the time/1 so it won't change
+#if a day of the week is given, the the avg will be sum(time)/num(days) and it will change
+#regardless of if one date or multiple dates are specified (via day of the week),
+# the estimation function should be run
+
 #When I am plotting and using lat and long I will also need to fix the data cleaning func because
 # it currently doesn't select the lat and long data to keep
 

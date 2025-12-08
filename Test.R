@@ -13,17 +13,7 @@ sched_otp_df <- clean_data(otp_df, "Scheduled.Time", "2024-05-01")
 sched_resulting_df <- route_transfers(sched_otp_df, route_num = 10, from = FALSE)
 
 #trying to run the cleaning function on a day of the week
-#first add a column for the day of the week to the data frame outside of the function
-#this has been moved to the data cleaning function
-# otp_df <- otp_df %>%
-#   mutate(Date = as.Date(Date), #this can and probably should happen in the data cleaning function
-#          Weekday = weekdays.Date(Date))  #this can and probably should happen in the data cleaning function
 act_mon_df <- clean_data(otp_df, "Scheduled.Time", "Monday")
-
-#I need to think about this more big picture/with my next steps in mind:
-  # In the data cleaning function, I want it to filter to the selected Date(s)
-  # This means that if I specify a date the cleaning func should subset to just that date
-  # but if I specify a day of the week the cleaning func should subset to all dates of that day of the week
 
   #THEN! I should create a new function called avg arrival time that will calculate
   # the avg_arrival_time for the given Date(s)
