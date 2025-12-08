@@ -18,7 +18,7 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
   #set up the results df
   res_df <- df_by_day %>%
     filter(Route == route_num) %>%
-    select(c(Date, Route, Stop, Stop.Sequence, Scheduled.Time)) %>%
+    select(c(Date, Route, Stop, Stop.Sequence, Time)) %>%
     mutate(num_transfers = 0)
   
   #subset the route on the given day
@@ -31,15 +31,15 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
     #find the goal bus stop (station that you are looking to see if other routes come here)
     goal_stop <- route_df[cur_stop, ]$Stop
 
-    #find the goal scheduled time (time you are looking to see if other routes come here)
-    goal_scheduled_time <- route_df[cur_stop, ]$Scheduled.Time
+    #find the goal time (time you are looking to see if other routes come here)
+    goal_time <- route_df[cur_stop, ]$Time
   
     #set the min and max time a bus can get to this stop to be considered a transfer
     #this will depend on if you are looking for the num transfers From or To this stop
-    min_time <- ifelse(from, goal_scheduled_time,
-                       goal_scheduled_time - minutes(window_transfer))
-    max_time <- ifelse(from, goal_scheduled_time + minutes(window_transfer),
-                       goal_scheduled_time)
+    min_time <- ifelse(from, goal_time,
+                       goal_time - minutes(window_transfer))
+    max_time <- ifelse(from, goal_time + minutes(window_transfer),
+                       goal_time)
       
     #for each route in the data
     for(r in unique(df_by_day$Route)){
@@ -49,8 +49,8 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
         #the goal_scheduled time, store these rows in a temporary data frame
       filter(Route != route_num,
               Stop == goal_stop,
-             Scheduled.Time >= min_time,
-             Scheduled.Time <= max_time)
+             Time >= min_time,
+             Time <= max_time)
       
       #If the temporary data frame is null, then there are no transfers at this stop, time, and day
       if(is.null(temp_df$Route)){
@@ -68,7 +68,7 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
         mutate(num_transfers = 
                  case_when((Route == cur_run$Route[1]) &
                            (Stop == cur_run$Stop[1]) &
-                           (Scheduled.Time == cur_run$Scheduled.Time[1]) ~ num_temp_transfers,
+                           (Time == cur_run$Time[1]) ~ num_temp_transfers,
                            TRUE ~ num_transfers))
     }
   }
