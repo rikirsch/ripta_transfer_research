@@ -15,9 +15,14 @@ library(lubridate)
 #' calculate the number of transfers for the bus route on the specified day
 clean_data <- function(full_data, type_of_time, day){
   cleaned_data <- full_data %>%
-    mutate(type_of_time = as.POSIXct(Scheduled.Time, format = "%Y-%m-%d %H:%M:%S", tz = "EST"),
+    #mutate all dates and times as needed
+    mutate(Date = as.Date(Date),
+           Weekday = weekdays.Date(Date),
+           type_of_time = as.POSIXct(eval(as.name(type_of_time)), format = "%Y-%m-%d %H:%M:%S", tz = "EST"),
            Time = type_of_time) %>%
-    filter(Date == day) %>%
+    ifelse(day %in% c(Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday),
+           filter(Weekday == day),
+           filter(Date == day)) %>%
     select(c(Date, Route, Stop, Stop.Sequence, Time))
   return(cleaned_data)
 }
