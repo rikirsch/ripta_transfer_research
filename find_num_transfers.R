@@ -91,7 +91,6 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
  # - add a param from = TRUE to default to showing the num transfers from this stop/route
  # this can be specified to from = FALSE to show the num transfers to this stop/route
 
-# 6. Add functions and use lapply instead of loops! These can still be in the same script
 # 7. Change the data cleaning to call the time col of interest Time so that way you
 # this way you can specify if you want to look at the scheduled times or the actual arrival times in the data
 # 8. Add a function called avg_arrival_time in a new script Estimation.R 
@@ -100,20 +99,16 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
 # 9. Plotting/Comparing/using this to answer a question
  # - check out the updated df with lat and long data
 
+# 6. Add functions and use lapply instead of loops! These can still be in the same script
+# -> This is giving me a lot of errors so I'm gonna continue on with the other steps for now and will do this as my
+# last thing if necessary/there is time
 
-#later issues:
-  #How do I plot this
-  #How do I add in the estimated/average arrival times
 
 #NOTES: 
 # Am I using too many for loops? --> can change away from for loops if it is taking too long,
 #but I don't need to start out w lapply or anything like that for the purposes of the final
 
 #CURRENT LEADING ISSUES:
-#Ready to think about how this is answering a question now that I can find the number of transfers for 
-#each stop and time for the given route/day
+#many errors when trying to switch from a for loop to sapply 
+ #-> putting this process on hold for now and continueing with other steps
 
-#possible next steps:
-# break the current code into more functions and use lapply 
-# plot the number of transfers in a visual way
-# find the average rates for each day of the week
