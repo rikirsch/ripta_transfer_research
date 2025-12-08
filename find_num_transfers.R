@@ -75,41 +75,6 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
   return(res_df)
 }
 
-
-
-
-transfers_at_stop <- function(){
-      for(r in unique(df_by_day$Route)){
-      temp_df <- df_by_day %>%
-        #if the stop is on a different route and at the goal_stop 
-        #and the scheduled time on this route is within the specified window of
-        #the goal_scheduled time, store these rows in a temporary data frame
-      filter(Route != route_num,
-              Stop == goal_stop,
-             Scheduled.Time >= min_time,
-             Scheduled.Time <= max_time)
-      
-      #If the temporary data frame is null, then there are no transfers at this stop, time, and day
-      if(is.null(temp_df$Route)){
-        num_temp_transfers <- 0
-      }
-      
-      #update the number of transfers to the number of observations in the temporary data frame
-      else{
-        num_temp_transfers <- length(temp_df$Route)
-      }
-      
-      #update the number of transfers for the given route, stop, and time 
-      #(which is specified in cur_run)
-      res_df <- res_df %>%
-        mutate(num_transfers = 
-                 case_when((Route == cur_run$Route[1]) &
-                           (Stop == cur_run$Stop[1]) &
-                           (Scheduled.Time == cur_run$Scheduled.Time[1]) ~ num_temp_transfers,
-                           TRUE ~ num_transfers))
-    }
-}
-
 #Steps:
 # 1. How do I find days of the week?
   # - I don't need to worry about this yet, I can just filter by one date and try this on the one date first
