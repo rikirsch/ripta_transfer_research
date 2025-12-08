@@ -1,10 +1,12 @@
 #source(find_num_transfers)
 library(tidyverse)
 library(lubridate)
+library(hms)
 
 #' Cleaning the Initial Data
 #' @description Clean the initial data and create a subset of the data by the day
-#'  and the type of time to compare (Scheduled, Arrival)
+#'  and the type of time to compare (Scheduled, Arrival), 
+#'  calculate the average arrival time of each stop
 #' @param full_data dataframe, the full bus data
 #' @param type_of_time string, "Scheduled.Time" or "Arrival.Arrival.Time" decides
 #' what column will be used to calculate the number of transfers,
@@ -31,25 +33,21 @@ clean_data <- function(full_data, type_of_time, day){
       cleaned_data <- cleaned_data %>%
         filter(Date == day)
     }
+  
   #select the columns of interest
   cleaned_data <- cleaned_data %>%
     select(c(Date, Route, Stop, Stop.Sequence, Time))
-
-  #Here is where I want to call a function to find the avg arrival times of each route and stop
-  #I will decide if I want this to be in this function or outside of this function
-  #it might just be a few lines of summarizing/grouping/mutating, 
-  #but I want to do it here so that the returned data has the Time col as the avg time
-  
-  #find the number of days of interest
-  n_days <- length(unique(cleaned_data$Date))
-  
-  #issue w/not being able to change date and time into just time
+ 
+  #Update time to be the average arrival time on each route and stop
   cleaned_data <- cleaned_data %>%
+    #group by parameters of interest, hour is used to differentiate between
+    #the multiple times that a route is run a day
     group_by(hour(Time), Route, Stop) %>%
-    #calculate the average time
-    mutate(Time = mean(Time))   %>%
-    #update the time column to exclude the date
-    mutate(Time = format(Time, '%H:%M:%S'))
-  
+    #calculate the average arrival time
+    mutate(Time = as.POSIXct(as_hms(mean(Time)))) #   %>%
+    # #update the time column to exclude the date
+    # mutate(Time = format(Time, '%H:%M:%S')) %>%
+    # mutate(Time = as.POSIXct(Time, format = '%H:%M:%S', tz = "EST"))
+    # 
   return(cleaned_data)
 }

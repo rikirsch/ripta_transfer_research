@@ -110,12 +110,14 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
 #but I don't need to start out w lapply or anything like that for the purposes of the final
 
 #CURRENT LEADING ISSUES:
-#THEN! I should create a new function called avg arrival time that will calculate
-# the avg_arrival_time for the given Date(s)
-#if only one date is given, then the avg will be the time/1 so it won't change
-#if a day of the week is given, the the avg will be sum(time)/num(days) and it will change
-#regardless of if one date or multiple dates are specified (via day of the week),
-# the estimation function should be run
+#can't get rid of the date from the date-time fully, but it has set all of them 
+#to 1970 Jan 1 so there won't be issues when trying to determine if one time is within the range of another,
+#It just might not look perfect in the results and that's ok but it won't impact my findings
+#REAL ISSUE:
+#Since I want to keep so many columns I'm using mutate, but this means it's not
+#collapsing by date and so it's keeping over 62k obsv when I want it to keep 17k,
+#this means the second function (transf calc) will take forever to run and be running over duplicated data
+#NEXT STEP: need to figure out how to only keep on of each combo of stop/route/time
 
 #When I am plotting and using lat and long I will also need to fix the data cleaning func because
 # it currently doesn't select the lat and long data to keep

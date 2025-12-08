@@ -16,10 +16,4 @@ sched_resulting_df <- route_transfers(sched_otp_df, route_num = 10, from = FALSE
 sched_mon_df <- clean_data(otp_df, "Scheduled.Time", "Monday")
 
 act_mon_df <- clean_data(otp_df, "Actual.Arrival.Time", "Monday")
-
-  #THEN! I should create a new function called avg arrival time that will calculate
-  # the avg_arrival_time for the given Date(s)
-    #if only one date is given, then the avg will be the time/1 so it won't change
-    #if a day of the week is given, the the avg will be sum(time)/num(days) and it will change
-    #regardless of if one date or multiple dates are specified (via day of the week),
-    # the estimation function should be run
+res_act_mon_transfers <- route_transfers(act_mon_df, route_num = 10)
