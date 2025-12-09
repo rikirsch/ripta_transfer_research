@@ -31,5 +31,3 @@ res_long_lat <- route_transfers(ripta_df_long_lat, route_num = 10, from = FALSE,
 
 ripta_df_long_lat <- clean_data(otp_long_ltd, "Actual.Arrival.Time", "Saturday")
 route_transfers(ripta_df_long_lat, route_num = 10, from = FALSE, day = "Saturday")
-
-#plotting_transfers(res_long_lat, "Monday", 10, "to")

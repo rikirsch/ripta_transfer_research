@@ -12,9 +12,10 @@ plotting_transfers <- function(res_df, day, route_number, from_or_to){
     geom_point(aes(StopLng, StopLat, size = num_transfers), alpha = 0.25) +
     #scale_color_gradient(breaks = seq(0,10,2), low = "red", 
     #                    high = "green", "Number of Transfers") +
-    labs(title = paste("Number of Possible RIPTA Transfers", from_or_to, "route", route_number, "on", day, "at each stop"),
+    labs(title = paste("Number of Possible RIPTA Transfers", from_or_to, "Route", route_number, "on", day, "at each Stop"),
          x = "Stop Longitude",
-         y = "Stop Latitude") +
+         y = "Stop Latitude",
+         legend = "Number of Transfers") +
     theme_minimal() +
     theme(legend.title = element_text(size = 7),
           plot.title = element_text(size = 7))

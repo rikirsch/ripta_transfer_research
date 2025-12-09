@@ -67,4 +67,5 @@ PHP 1560 final project on the possibility of RIPTA transfers given the current r
   - How can the graphs also represent the time of day where the most transfers are happening?
   - How can the average arrival rates be calculated without grouping by hour to preserve multiple trips to the same stop within an hour?
   	- Should these bounds be placed around the scheduled time instead?
+  - Overlay an image of Rhode Island over the plot?
 
