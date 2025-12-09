@@ -74,4 +74,33 @@ mon_sml_transf_plot <- clean_data(otp_long_ltd,
 ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/mon_sml_transf_plot.png", 
        plot = mon_sml_transf_plot,
        width = 7, height = 7)
-#running the 
+
+#Repeating for Tuesday Plots
+tues_sml_transf_plot <- clean_data(otp_long_ltd,
+                                  type_of_time = "Actual.Arrival.Time", 
+                                  day = "Tuesday", 
+                                  route_number = c(10, 29, 11), 
+                                  transfer_wait_time = 15, 
+                                  from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/tues_sml_transf_plot.png", 
+       plot = tues_sml_transf_plot,
+       width = 7, height = 7)
+
+#Repeating for Saturday Plots
+sat_sml_transf_plot <- clean_data(otp_long_ltd,
+                                   type_of_time = "Actual.Arrival.Time", 
+                                   day = "Saturday", 
+                                   route_number = c(10, 29, 11), 
+                                   transfer_wait_time = 15, 
+                                   from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/sat_sml_transf_plot.png", 
+       plot = sat_sml_transf_plot,
+       width = 7, height = 7)
+
+
+clean_data(otp_long_ltd,
+          type_of_time = "Actual.Arrival.Time", 
+          day = "Saturday", 
+          route_number = c(29), 
+          transfer_wait_time = 15, 
+          from_to = TRUE)

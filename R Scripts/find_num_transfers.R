@@ -27,10 +27,7 @@ route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, f
     
     #if the route does not run on this day
     if(length(route_df$Route) == 0){
-      res_df <- df_by_day %>%
-        filter(Route == route_num) %>%
-        select(c(Route, Stop, Stop.Sequence, Time, StopLat, StopLng)) %>%
-        mutate(num_transfers = 0)
+      res_df <- res_df
     }
     else{
       #for each stop on the specified route (other than the first stop where people won't transfer from)
@@ -85,7 +82,7 @@ route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, f
     
     #store if checking for transfers from or to the established route as
     #characters for plotting
-    from_now <- ifelse(from, "From", "To")
+    from_now <- ifelse(from, "from", "to")
 
     #call the plotting function on the results data frame
     res <- plotting_transfers(res_df, day, route_num_vector, from_or_to = from_now)

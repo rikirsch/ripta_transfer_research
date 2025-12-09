@@ -26,13 +26,13 @@ plotting_transfers <- function(res_df, day, route_number, from_or_to){
     scale_size_continuous(name = "Number of Transfers") +
     
     #update the x and y axis titles and add a title
-    labs(title = paste("Number of Possible RIPTA Transfers", from_or_to, "Listed Routes on", day, "at each Stop"),
+    labs(title = paste("Number of Possible RIPTA Transfers", from_or_to, "Listed Routes on", day, "at each Stop, based on"),
          x = "Longitude",
          y = "Latitude") +
     
     theme_minimal() +
     theme(legend.title = element_text(size = 7),
-          plot.title = element_text(size = 7))
+          plot.title = element_text(size = 10))
   return(res_plot)
 }
 
