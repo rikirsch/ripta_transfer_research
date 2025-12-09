@@ -28,37 +28,35 @@ PHP 1560 final project on the possibility of RIPTA transfers given the current r
 
   9. Plotting/Comparing/using this to answer a question
    - check out the updated df with lat and long data
-
+   * figure out how to plot multiple routes on one plot (outside of function)
+   * Depending on how I go about doing that:
+   	* Update Data Clean to run for each given input
+		* Either filter to all given inputs at once or run it one at a time
+	*Update Plotting to and route_transfers to run for multiple routes if using option 1 above (more loops?)
+    *Test on Rt 10 and 11
+    
+    - Plotting the 3 once the data is adjusted shouldn't be too hard, it's just updating color = Route, the harder part is updating the data
+    
+    - Splitting up the plotting like this with 3 rts shown on one plot for each day of the week (and then a second set of 7 plots for scheduled arrival time transfers of the 3 rts)
+    will show how routes very from each other, show where the transfer distribution is, and will show how delays/actual time vs scheduled time impact transfers
+     (comparing the first 7 to the second 7)
+    
   6. Add functions and use lapply instead of loops! These can still be in the same script
   -> This is giving me a lot of errors so I'm gonna continue on with the other steps for now and will do this as my
   last thing if necessary/there is time
 
 
  NOTES: 
-  Am I using too many for loops? --> can change away from for loops if it is taking too long,
+ - Am I using too many for loops? --> can change away from for loops if it is taking too long,
  but I don't need to start out w lapply or anything like that for the purposes of the final
-
- CURRENT LEADING ISSUES:
- can't get rid of the date from the date-time fully, but it has set all of them 
+ 
+ - can't get rid of the date from the date-time fully, but it has set all of them 
  to 1970 Jan 1 so there won't be issues when trying to determine if one time is within the range of another,
  It just might not look perfect in the results and that's ok but it won't impact my findings
 
- REAL ISSUE:
- Since I want to keep so many columns I'm using mutate, but this means it's not
- collapsing by date and so it's keeping over 62k obsv when I want it to keep 17k,
- this means the second function (transf calc) will take forever to run and be running over duplicated data
- NEXT STEP: need to figure out how to only keep on of each combo of stop/route/time
-     I have mostly fixed this using summarize, but it got rid of too many obsv,
-     I think this is because there are some routes that visit the same stop
-      within an hr so it uses those to estimate the average arrival time
-       This is a bug that I will note in my report and mention it as a limitation/
-       future improvement to be made
 
- When I am plotting and using lat and long I will also need to fix the data cleaning func because
-  it currently doesn't select the lat and long data to keep
-
- many errors when trying to switch from a for loop to sapply 
-  -> putting this process on hold for now and continueing with other steps
+ CURRENT LEADING ISSUES:
+ Edge case bug: will return a blank df if any of the routes don't run on the specified day
   
   
   For Future Research:
