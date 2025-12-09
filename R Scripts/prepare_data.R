@@ -1,17 +1,11 @@
-#source(find_num_transfers)
-#source(Plotting)
-
-library(tidyverse)
-library(lubridate)
-library(ggplot2)
-library(hms)
+source("find_num_transfers.R")
 
 #' Cleaning the Initial Data
 #' @description Clean the initial data and create a subset of the data by the day
 #'  and the type of time to compare (Scheduled, Arrival), 
 #'  calculate the average arrival time of each stop
 #' @param full_data dataframe, the full bus data that has been read in
-#' @param type_of_time string, "Scheduled.Time" or "Arrival.Arrival.Time" decides
+#' @param type_of_time string, "Scheduled.Time" or "Actual.Arrival.Time" decides
 #' what column will be used to calculate the number of transfers,
 #' eg: do you want to know the theoretical number of transfers with this schedule
 #' or the number of transfers that are possible based on average real arrival times?

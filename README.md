@@ -1,39 +1,38 @@
-  ripta_transfer_research
-PHP 1560 final project on the possibility of RIPTA transfers given the current routes.
+RIPTA Transfer Research
+
+This is my final project for PHP 1560: R for Data Analysis. The following Scripts and Results address the question:
+Where and when are potential transfer hubs for the Rhode Island Public Transit Authorities bus routes? These results can help dictate where to allocate funding for transfer hubs beyond Kennedy Plaza. The repository can also be used to find where bus delays are causing the most missed transfers by comparing possible transfers with scheduled bus routes and average actual arrival times.
+
+Calculations are made based on simulated RIPTA data from May 1 2024 - May 31 2024. 
+
+To use the program, call clean_data from the script prepare_data.R. This function will clean the data with the given parameters and call route_transfer(), which will calculate the number of transfers possible going from the specified route(s) or going to the specified route(s). The route_transfer() function will call the plotting() function to visualize these possible transfers. To create the results stored in the Results folder of this repository, see the arguments used in script Test.R. 
 
 
- Steps:
-  1. How do I find days of the week?
-    - I don't need to worry about this yet, I can just filter by one date and try this on the one date first
-  2. How do I add the transfer time window to the current format of time?
-   - Clean data first to mutate scheduled time to be in date time with format
-   "%Y-%m-%d %H:%M:%S"
-   - use the minute function to add or subtract the window in this script
-  3. How do I check for the possible transfers/am I checking the indexing right?
-   - use the filter! how you store it will decide how the indexing works (?)
-  4. How do I store the number of transfers?
-   - group by the variables of interest and then summarize, 
-   then calculate the number of transfers by finding the length of the filtered df
-  5. How do I compare transfers to the stop to transfers from the stop?
-   - add a param from = TRUE to default to showing the num transfers from this stop/route
-   this can be specified to from = FALSE to show the num transfers to this stop/route
-  7. Change the data cleaning to call the time col of interest Time so that way you
-  this way you can specify if you want to look at the scheduled times or the actual arrival times in the data
-   - needed to use the eval(as.name(type_of_time)) function but it works!
-  8. Add a function called avg_arrival_time in a new script Estimation.R 
-   - function will find the avg arrival time for each route, stop, day, time over the course of the month
-   - this output/res can be used as the Time col for the num transfers input
-   - THIS is not done in its own function, instead it is done in the prepare_data Script
-   under the clean_data function
+Parameters to specify in clean_data():
 
-  9. Plotting/Comparing/using this to answer a question
-   - check out the updated df with lat and long data
-   * figure out how to plot multiple routes on one plot (outside of function)
-   * Depending on how I go about doing that:
-   	* Update Data Clean to run for each given input
-		* Either filter to all given inputs at once or run it one at a time
-	*Update Plotting to and route_transfers to run for multiple routes if using option 1 above (more loops?)
-    *Test on Rt 10 and 11
+full_data: 	dataframe, the full bus data that has been read in
+
+type_of_time: string, "Scheduled.Time" or "Actual.Arrival.Time" , 
+This decides what column will be used to calculate the number of transfers and whether the arrival time is based on the scheduled time or the observed arrival time in the data.
+This adds room for applications of the programing in comparing scheduled arrival times to actual arrival times and the effects the difference between the two arrival times has on the interconnectivity of Rhode Island. It also can be used to show how consistent delays at specific stations may make transportation throughout the state more difficult for RIPTA users as they don't have as many options for buses to transfer to and are therefore more limited in where they can go.
+
+day: chr, the day(s) that the number of transfers is calculated for, this may be a single date or day of the week
+If looking at a day of the week, the arrival time will be updated to show the average arrival time for a certain stop in the stop sequence. This will only have an effect if using the Actual.Arrival.Time as the Scheduled.Time is the same for each day of the week throughout the month. 
+
+route_number vector(int), the route(s) to calculate and plot the number of transfers for
+The results look at simulated route 10, 29, and 11 because they have small, medium, and high number of stops respectively.
+
+transfer_wait_time: int, the length of time in minutes to wait for a transfer, the default is 15 minutes.
+This can be changed depending on how long people are willing to wait for a transfer. This parameter may also be used to assess quick transfers compared to longer wait transfers, and the wait time can be adjusted to study how improving conditions at bus stops and having users willing to wait for longer may impact ridership.
+
+from_to: boolean, TRUE if looking for the number of transfers possible FROM the specified route(s), FALSE if looking for the number of transfers possible TO the specified route(s), default to TRUE
+
+
+Understanding the Results:
+
+
+
+Limitations and Future Research: 
     
     - Plotting the 3 once the data is adjusted shouldn't be too hard, it's just updating color = Route, the harder part is updating the data
     
@@ -69,4 +68,6 @@ PHP 1560 final project on the possibility of RIPTA transfers given the current r
   #I want to group by every 20 minutes instead of every hour to try and account for some of the weird grouping that is happening
 
 #in the future, don't want to check the last stop if transferring to and do want to check the first stop if transferring to
+    #Due to the flexibility of the code, I am not setting the colors directly (ex: rt 11 is red in one plot but rt 10 is red in the next plot)
 
+#utalize the function more when plotting and lapply over days of the week to get all of the results in fewer lines of code
