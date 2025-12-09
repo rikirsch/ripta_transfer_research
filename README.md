@@ -9,6 +9,10 @@ To use the program, call clean_data from the script prepare_data.R. This functio
 
 
 
+Necessary Libraries: ggplot2, lubridate, tidyverse
+
+
+
 Parameters to specify in clean_data():
 
 full_data: 	dataframe, the full bus data that has been read in
