@@ -83,6 +83,8 @@ route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, f
       }
     }
     
+    #store if checking for transfers from or to the established route as
+    #characters for plotting
     from_now <- ifelse(from, "From", "To")
 
     #call the plotting function on the results data frame
@@ -97,9 +99,9 @@ route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, f
 
 #Potential Steps:
 #1. one plot per route with dots in 7 colors for the 7 days of the week 
-# - could create a plot for route 10 (confirmed minimal stops) 
-# a plot for route 11 (confirmed medium/high number of stops)
-# and a plot for route 66 (confirmed most stops currently)
+# - could create a plot for route 10 (confirmed small num stops) 
+# a plot for route 29 (confirmed medium num stops)
+# a plot for route 11 (confirmed most stops in simulated data)
 # - cons: overlapping colors might make it hard to see frequency per day/muddy the restults
 # / currently, the opacity shows roughly how many times the bus stops at the given stop, 
 #and we would lose that looking at one route over multiple days on one plot

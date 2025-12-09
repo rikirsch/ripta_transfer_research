@@ -65,11 +65,13 @@ ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/R
 sapply(otp_long_ltd$Route, clean_data)
 
 #running the functions on vectors of route numbers
-mon_rt11_transf_plot <- clean_data(otp_long_ltd,
-                                   type_of_time = "Actual.Arrival.Time", 
-                                   day = "Monday", 
-                                   route_number = c(65, 10), 
-                                   transfer_wait_time = 15, 
-                                   from_to = TRUE)
-
+mon_sml_transf_plot <- clean_data(otp_long_ltd,
+                                  type_of_time = "Actual.Arrival.Time", 
+                                  day = "Monday", 
+                                  route_number = c(10, 29, 11), 
+                                  transfer_wait_time = 15, 
+                                  from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/mon_sml_transf_plot.png", 
+       plot = mon_sml_transf_plot,
+       width = 7, height = 7)
 #running the 
