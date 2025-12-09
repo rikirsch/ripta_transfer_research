@@ -1,5 +1,4 @@
-#This is where I will calculate the number of possible transfers for each stop,
-#on each route, at each time, on each day of the week.
+#source(Plotting)
 
 #' Calculate number of possible transfers on the given day for the given route
 #'@description a function to find the number of transfers at each stop along a route
@@ -14,11 +13,11 @@
 #'@return num_transfers_df dataframe with cols:
 #'  route num, stop.sequence, stop loc, stop time, number of possible transfers
 
-route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = TRUE){
+route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = TRUE, day){
   #set up the results df
   res_df <- df_by_day %>%
     filter(Route == route_num) %>%
-    select(c(Route, Stop, Stop.Sequence, Time)) %>%
+    select(c(Route, Stop, Stop.Sequence, Time, StopLat, StopLng)) %>%
     mutate(num_transfers = 0)
   
   #subset the route on the given day
@@ -72,7 +71,10 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
                            TRUE ~ num_transfers))
     }
   }
-  return(res_df)
+  #call the plotting function on the results data frame
+  res <- plotting_transfers(res_df, day, route_num, from_or_to = "From")
+  #return the results plot
+  return(res)
 }
 
 #Steps:
@@ -102,33 +104,6 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
 # 9. Plotting/Comparing/using this to answer a question
  # - check out the updated df with lat and long data
 
-# 6. Add functions and use lapply instead of loops! These can still be in the same script
-# -> This is giving me a lot of errors so I'm gonna continue on with the other steps for now and will do this as my
-# last thing if necessary/there is time
-
-
-#NOTES: 
-# Am I using too many for loops? --> can change away from for loops if it is taking too long,
-#but I don't need to start out w lapply or anything like that for the purposes of the final
-
 #CURRENT LEADING ISSUES:
-#can't get rid of the date from the date-time fully, but it has set all of them 
-#to 1970 Jan 1 so there won't be issues when trying to determine if one time is within the range of another,
-#It just might not look perfect in the results and that's ok but it won't impact my findings
-#REAL ISSUE:
-#Since I want to keep so many columns I'm using mutate, but this means it's not
-#collapsing by date and so it's keeping over 62k obsv when I want it to keep 17k,
-#this means the second function (transf calc) will take forever to run and be running over duplicated data
-#NEXT STEP: need to figure out how to only keep on of each combo of stop/route/time
-    #I have mostly fixed this using summarize, but it got rid of too many obsv,
-    #I think this is because there are some routes that visit the same stop
-    # within an hr so it uses those to estimate the average arrival time
-      #This is a bug that I will note in my report and mention it as a limitation/
-      #future improvement to be made
-
-#When I am plotting and using lat and long I will also need to fix the data cleaning func because
-# it currently doesn't select the lat and long data to keep
-
-#many errors when trying to switch from a for loop to sapply 
- #-> putting this process on hold for now and continueing with other steps
+# How to run the plotting function from the route_transfers Script?
 

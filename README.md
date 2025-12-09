@@ -59,4 +59,12 @@ PHP 1560 final project on the possibility of RIPTA transfers given the current r
 
  many errors when trying to switch from a for loop to sapply 
   -> putting this process on hold for now and continueing with other steps
+  
+  
+  For Future Research:
+  The following are steps that are beyond the scope of this project or this class but would be interesting to see in future research on the topic:
+  - How can the code be simplified using sapply instead of for loops?
+  - How can the graphs also represent the time of day where the most transfers are happening?
+  - How can the average arrival rates be calculated without grouping by hour to preserve multiple trips to the same stop within an hour?
+  	- Should these bounds be placed around the scheduled time instead?
 

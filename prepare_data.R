@@ -1,6 +1,7 @@
 #source(find_num_transfers)
 library(tidyverse)
 library(lubridate)
+library(ggplot2)
 library(hms)
 
 #' Cleaning the Initial Data
@@ -36,16 +37,18 @@ clean_data <- function(full_data, type_of_time, day){
   
   #select the columns of interest
   cleaned_data <- cleaned_data %>%
-    select(c(Date, Route, Stop, Stop.Sequence, Time))
+    select(c(Date, Route, Stop, Stop.Sequence, Time, StopLat, StopLng))
  
   #Update time to be the average arrival time on each route and stop
   cleaned_data <- cleaned_data %>%
     #group by parameters of interest, hour is used to differentiate between
     #the multiple times that a route is run a day
-    group_by(hour(Time), Route, Stop, Stop.Sequence) %>%
+    group_by(hour(Time), Route, Stop, Stop.Sequence, StopLat, StopLng) %>%
     #calculate the average arrival time
     summarize(Time = as.POSIXct(as_hms(mean(Time))))    %>%
     ungroup()
    
   return(cleaned_data)
 }
+
+#I want to group by every 20 minutes instead of every hour to try and account for some of the weird grouping that is happening
