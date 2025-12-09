@@ -8,6 +8,7 @@ Calculations are made based on simulated RIPTA data from May 1 2024 - May 31 202
 To use the program, call clean_data from the script prepare_data.R. This function will clean the data with the given parameters and call route_transfer(), which will calculate the number of transfers possible going from the specified route(s) or going to the specified route(s). The route_transfer() function will call the plotting() function to visualize these possible transfers. To create the results stored in the Results folder of this repository, see the arguments used in script Test.R. 
 
 
+
 Parameters to specify in clean_data():
 
 full_data: 	dataframe, the full bus data that has been read in
@@ -25,49 +26,25 @@ The results look at simulated route 10, 29, and 11 because they have small, medi
 transfer_wait_time: int, the length of time in minutes to wait for a transfer, the default is 15 minutes.
 This can be changed depending on how long people are willing to wait for a transfer. This parameter may also be used to assess quick transfers compared to longer wait transfers, and the wait time can be adjusted to study how improving conditions at bus stops and having users willing to wait for longer may impact ridership.
 
-from_to: boolean, TRUE if looking for the number of transfers possible FROM the specified route(s), FALSE if looking for the number of transfers possible TO the specified route(s), default to TRUE
+from_to: boolean, TRUE if looking for the number of transfers possible FROM the specified route(s), FALSE if looking for the number of transfers possible TO the specified route(s), default to TRUE. This can be used to compare within a route and see if it is easier to get to the route or go somewhere else from the route. 
+
 
 
 Understanding the Results:
 
+Results highlight the estimated number of transfers for routes 10, 29, and 11 for each day of the week. While all of these routes run Sunday - Friday, the results show how the number of transfers along these routes still change throughout the week and especially on the weekend as other routes are added or changed depending on the day of the week and the time of day. Route 10 is missing from the Saturday plot because route 10 does not run on Saturday. The plots show the impact this has on the other routes, with smaller points representing fewer possible transfers along the other routes. 
 
 
-Limitations and Future Research: 
-    
-    - Plotting the 3 once the data is adjusted shouldn't be too hard, it's just updating color = Route, the harder part is updating the data
-    
-    - Splitting up the plotting like this with 3 rts shown on one plot for each day of the week (and then a second set of 7 plots for scheduled arrival time transfers of the 3 rts)
-    will show how routes very from each other, show where the transfer distribution is, and will show how delays/actual time vs scheduled time impact transfers
-     (comparing the first 7 to the second 7)
-    
-  6. Add functions and use lapply instead of loops! These can still be in the same script
-  -> This is giving me a lot of errors so I'm gonna continue on with the other steps for now and will do this as my
-  last thing if necessary/there is time
 
+Limitations and Future Research:  
+The following are questions that are beyond the scope of this project or this class, but they would be interesting to see in future research on the topic of bus transfers.
 
- NOTES: 
- - Am I using too many for loops? --> can change away from for loops if it is taking too long,
- but I don't need to start out w lapply or anything like that for the purposes of the final
- 
- - can't get rid of the date from the date-time fully, but it has set all of them 
- to 1970 Jan 1 so there won't be issues when trying to determine if one time is within the range of another,
- It just might not look perfect in the results and that's ok but it won't impact my findings
+Currently, the average arrival rates are calculated by route, stop, stop.sequence, and hour, but this does not differentiate between a route that stops as the same location twice within an hour from two instances of the same stop on different days. Going forward, this could be addressed with a moving window around the scheduled time to find other instances of the stop on different days without over-consolidating and over-simplifying the routes.
 
+Future updates can be applied to this program to better implement sapply and apply instead of for loops. This may improve the runtime of the program, especially when using routes with many stops.
 
- CURRENT LEADING ISSUES:
- Edge case bug: will return a blank df if any of the routes don't run on the specified day
-  
-  
-  For Future Research:
-  The following are steps that are beyond the scope of this project or this class but would be interesting to see in future research on the topic:
-  - How can the code be simplified using sapply instead of for loops?
-  - How can the graphs also represent the time of day where the most transfers are happening?
-  - How can the average arrival rates be calculated without grouping by hour to preserve multiple trips to the same stop within an hour?
-  	- Should these bounds be placed around the scheduled time instead?
-  - Overlay an image of Rhode Island over the plot?
-  #I want to group by every 20 minutes instead of every hour to try and account for some of the weird grouping that is happening
+In the future, the plotting feature may be updated to reflect the time of day with the most possible transfers. This was not used in this repository because it would detract from other features of the results that I wanted to highlight. Also, it would be difficult to assign the time of day with the most possible transfers if there are similarly large numbers of possible transfers once at the beginning of the day and once at the end of the day. More work must be done to reconfigure how the results are visualized to include the time of day in the plot. Perhaps a variation of a ridge line plot could be used.
 
-#in the future, don't want to check the last stop if transferring to and do want to check the first stop if transferring to
-    #Due to the flexibility of the code, I am not setting the colors directly (ex: rt 11 is red in one plot but rt 10 is red in the next plot)
+On line 44 of find_num_transfers.R, the first stop is skipped when calculating the number of transfers because it is impossible to transfer from the first stop as riders must get on the bus before they get off. This was used in an earlier addition of the code that did not allow for calculating possible transfers to the specified stop; however, this does not account for calculations of transfers TO the specified route. For the calculations of transfers TO the specified route, the calculation should discount the last stop but include the first stop as riders cannot transfer to the last stop but may transfer to the first stop. This is a limitation of the current code and is part of why the results are only looking at transfers FROM the specified lines.
 
-#utalize the function more when plotting and lapply over days of the week to get all of the results in fewer lines of code
+Due to the flexibility of the code, I am not setting the colors of each route directly. The benefits of this are that it allows for this program to run regardless of the route number in the system. For example, if RIPTA changes the route numbers or adds a new one, this program will still run. The limitation of this flexibility is that routes do not have a consistent color across the plots. For example, in the results plots, route 10 is generally red, but in the Saturday plot, route 11 is red. Please look closely at the legend of each plot for clarification on the the color representation.
