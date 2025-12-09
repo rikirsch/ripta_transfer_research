@@ -18,7 +18,7 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
   #set up the results df
   res_df <- df_by_day %>%
     filter(Route == route_num) %>%
-    select(c(Date, Route, Stop, Stop.Sequence, Time)) %>%
+    select(c(Route, Stop, Stop.Sequence, Time)) %>%
     mutate(num_transfers = 0)
   
   #subset the route on the given day

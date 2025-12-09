@@ -42,12 +42,10 @@ clean_data <- function(full_data, type_of_time, day){
   cleaned_data <- cleaned_data %>%
     #group by parameters of interest, hour is used to differentiate between
     #the multiple times that a route is run a day
-    group_by(hour(Time), Route, Stop) %>%
+    group_by(hour(Time), Route, Stop, Stop.Sequence) %>%
     #calculate the average arrival time
-    mutate(Time = as.POSIXct(as_hms(mean(Time)))) #   %>%
-    # #update the time column to exclude the date
-    # mutate(Time = format(Time, '%H:%M:%S')) %>%
-    # mutate(Time = as.POSIXct(Time, format = '%H:%M:%S', tz = "EST"))
-    # 
+    summarize(Time = as.POSIXct(as_hms(mean(Time))))    %>%
+    ungroup()
+   
   return(cleaned_data)
 }
