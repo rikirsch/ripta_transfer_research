@@ -42,16 +42,24 @@ otp_long_ltd <- read.csv('/Users/rachelkirsch/Downloads/1560FinalProject/otp_sim
 
 
 #Running the clean_data function now that it calls route_transfers which calls plotting_transfers
-clean_data(otp_long_ltd,
-          type_of_time = "Actual.Arrival.Time", 
-          day = "Tuesday", 
-          route_number = 10, 
-          transfer_wait_time = 15, 
-          from_to = TRUE)
+thurs_rt10_transf_plot <- clean_data(otp_long_ltd,
+                                     type_of_time = "Actual.Arrival.Time", 
+                                     day = "Tuesday", 
+                                     route_number = 10, 
+                                     transfer_wait_time = 15, 
+                                     from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/Sunday_Actual_Rt10_Transfer_Plot.png", 
+       plot = thurs_rt10_transf_plot,
+       width = 7, height = 7)
 
-clean_data(otp_long_ltd,
-           type_of_time = "Actual.Arrival.Time", 
-           day = "Sunday", 
-           route_number = 10, 
-           transfer_wait_time = 15, 
-           from_to = TRUE)
+mon_rt11_transf_plot <- clean_data(otp_long_ltd,
+                                   type_of_time = "Actual.Arrival.Time", 
+                                   day = "Monday", 
+                                   route_number = 11, 
+                                   transfer_wait_time = 15, 
+                                   from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/mon_actual_rt11_transf_plot.png", 
+       plot = mon_rt11_transf_plot,
+       width = 7, height = 7)
+
+sapply(otp_long_ltd$Route, clean_data)

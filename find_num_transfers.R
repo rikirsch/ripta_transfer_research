@@ -89,5 +89,18 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
 # 10. create and store results that answer my question
 # 11. Update comments (ESPECIALLY ROXYGEN)
 
+#Potential Steps:
+#1. one plot per route with dots in 7 colors for the 7 days of the week 
+ # - could create a plot for route 10 (confirmed minimal stops) 
+ # a plot for route 11 (confirmed medium/high number of stops)
+ # and a plot for route 66 (confirmed most stops currently)
+ # - cons: overlapping colors might make it hard to see frequency per day/muddy the restults
+ # / currently, the opacity shows roughly how many times the bus stops at the given stop, 
+ #and we would lose that looking at one route over multiple days on one plot
+
+#2 one plot per day of the week (7 plots) with three different colored dots per route (run routes 10, 11, and 66)
+ # - cons: harder to implement? still muddied plot with the different colors 
+ # - pros: easier to compare routes and see more transfer hub patterns
+
 #CURRENT LEADING ISSUES:
 #how to store results and answer the initial question
