@@ -98,6 +98,56 @@ ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/R
        width = 7, height = 7)
 
 
+#Repeating for Wednesday Plots
+wed_sml_transf_plot <- clean_data(otp_long_ltd,
+                                  type_of_time = "Actual.Arrival.Time", 
+                                  day = "Wednesday", 
+                                  route_number = c(10, 29, 11), 
+                                  transfer_wait_time = 15, 
+                                  from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/wed_sml_transf_plot.png", 
+       plot = wed_sml_transf_plot,
+       width = 7, height = 7)
+
+
+#Repeating for Thursday Plots
+thurs_sml_transf_plot <- clean_data(otp_long_ltd,
+                                  type_of_time = "Actual.Arrival.Time", 
+                                  day = "Thursday", 
+                                  route_number = c(10, 29, 11), 
+                                  transfer_wait_time = 15, 
+                                  from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/thurs_sml_transf_plot.png", 
+       plot = thurs_sml_transf_plot,
+       width = 7, height = 7)
+
+
+#Repeating for Friday Plots
+fri_sml_transf_plot <- clean_data(otp_long_ltd,
+                                    type_of_time = "Actual.Arrival.Time", 
+                                    day = "Friday", 
+                                    route_number = c(10, 29, 11), 
+                                    transfer_wait_time = 15, 
+                                    from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/fri_sml_transf_plot.png", 
+       plot = fri_sml_transf_plot,
+       width = 7, height = 7)
+
+
+#Repeating for Friday Plots
+sun_sml_transf_plot <- clean_data(otp_long_ltd,
+                                  type_of_time = "Actual.Arrival.Time", 
+                                  day = "Sunday", 
+                                  route_number = c(10, 29, 11), 
+                                  transfer_wait_time = 15, 
+                                  from_to = TRUE)
+ggsave("/Users/rachelkirsch/Downloads/1560FinalProject/ripta_transfer_research/Results/sun_sml_transf_plot.png", 
+       plot = fri_sml_transf_plot,
+       width = 7, height = 7)
+
+
+
+
 clean_data(otp_long_ltd,
           type_of_time = "Actual.Arrival.Time", 
           day = "Saturday", 

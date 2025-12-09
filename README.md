@@ -66,4 +66,7 @@ PHP 1560 final project on the possibility of RIPTA transfers given the current r
   - How can the average arrival rates be calculated without grouping by hour to preserve multiple trips to the same stop within an hour?
   	- Should these bounds be placed around the scheduled time instead?
   - Overlay an image of Rhode Island over the plot?
+  #I want to group by every 20 minutes instead of every hour to try and account for some of the weird grouping that is happening
+
+#in the future, don't want to check the last stop if transferring to and do want to check the first stop if transferring to
 

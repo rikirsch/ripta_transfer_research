@@ -3,34 +3,44 @@
 #' Calculate number of possible transfers on the given day for the given route
 #'@description a function to find the number of transfers at each stop along a route
 #'@param df_by_day dataframe, one day of RIPTA arrival data
-#'@param route_num double, the route of interest/to find transfers from
+#'@param route_num_vector vector(int), the route(s) of interest to
+#' find the transfer data of
 #'@param window_transfer double, the window of waiting for a transfer in minutes,
 #'  default 15 minutes
 #'@param from boolean, TRUE if calculating the number of buses you can transfer
 #' to FROM this route, FALSE if calculating the number of buses you can use to 
 #' transfer TO this route, 
 #' default value is TRUE (number of buses you can get to FROM this stop)
-#'@return num_transfers_df dataframe with cols:
-#'  route num, stop.sequence, stop loc, stop time, number of possible transfers
+#'@param day chr, date or day of the week that the transfer calculation is running on
+#'@return res ggplot of transfer placement and count by route, based on res_df
+#'from this function, res_df is a data frame with columns for Route, 
+#'Stop, Stop.Sequence, Time, StopLat, and StopLng where StopLat and StopLng are
+#'the latitude and longitude of the Stop respectively
 
 route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, from = TRUE, day){
-  #set up the results df
+  #set up the results dataframe
   res_df <- df_by_day %>%
+    #filter to the routes of interest
     filter(Route %in% route_num_vector) %>%
     select(c(Route, Stop, Stop.Sequence, Time, StopLat, StopLng)) %>%
+    #start with no transfers for all stop, route, time combinations
     mutate(num_transfers = 0)
   
-  #for each route in the route vector (may ultimately replace with sapply by Route)
+  #for each route in the route vector
   for(route_num in route_num_vector){
     #subset the route on the given day
     route_df <- df_by_day[df_by_day$Route == route_num, ]
     
     #if the route does not run on this day
     if(length(route_df$Route) == 0){
+      #no changes
       res_df <- res_df
     }
+    #if the route does run on this day
     else{
       #for each stop on the specified route (other than the first stop where people won't transfer from)
+      #This does not fully address transfering TO this route, 
+      #where someone could transfer to the first stop but not the last stop
       for(cur_stop in 2:length(route_df$Route)){ 
         cur_run <- route_df[cur_stop, ] #find the full current run
         
@@ -63,13 +73,14 @@ route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, f
             num_temp_transfers <- 0
           }
           
-          #update the number of transfers to the number of observations in the temporary data frame
+          #If there are transfers on this route, update the number of transfers
+          #to the number of observations in the temporary data frame
           else{
             num_temp_transfers <- length(temp_df$Route)
           }
           
-          #update the number of transfers for the given route, stop, and time 
-          #(which is specified in cur_run)
+          #update the number of transfers in the results data frame (res_df)
+          #for the given route, stop, and time (which is specified in cur_run)
           res_df <- res_df %>%
             mutate(num_transfers = 
                      case_when((Route == cur_run$Route[1]) &
@@ -91,21 +102,3 @@ route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, f
   return(res)
 }
 
-# 10. create and store results that answer my question
-# 11. Update comments (ESPECIALLY ROXYGEN)
-
-#Potential Steps:
-#1. one plot per route with dots in 7 colors for the 7 days of the week 
-# - could create a plot for route 10 (confirmed small num stops) 
-# a plot for route 29 (confirmed medium num stops)
-# a plot for route 11 (confirmed most stops in simulated data)
-# - cons: overlapping colors might make it hard to see frequency per day/muddy the restults
-# / currently, the opacity shows roughly how many times the bus stops at the given stop, 
-#and we would lose that looking at one route over multiple days on one plot
-
-#2 one plot per day of the week (7 plots) with three different colored dots per route (run routes 10, 11, and 66)
-# - cons: harder to implement? still muddied plot with the different colors 
-# - pros: easier to compare routes and see more transfer hub patterns
-
-#CURRENT LEADING ISSUES:
-#how to store results and answer the initial question

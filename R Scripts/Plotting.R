@@ -20,6 +20,7 @@ plotting_transfers <- function(res_df, day, route_number, from_or_to){
     #add the geometric properties, alpha to have more translucent points
     #to see number of times a route comes to that stop through opacity
     #color depends on route number and size depends on the number of transfers
+    #Due to the flexibility of the code, I am not setting the colors directly
     geom_point(aes(StopLng, StopLat, size = num_transfers, color = Route), alpha = 0.25) +
     
     #Update the name of the size legend
