@@ -86,12 +86,8 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
   return(res)
 }
 
-# 9. Plotting/Comparing/using this to answer a question
- # - check out the updated df with lat and long data
+# 10. create and store results that answer my question
+# 11. Update comments (ESPECIALLY ROXYGEN)
 
 #CURRENT LEADING ISSUES:
-# What to do when asking about a route and day that the route doesn't run  
-  # - eg: Route 10 on Saturdays
-  #currently attempting to use is.null to check with an if statement before
-  #running the code but this isn't working for some reason
-
+#how to store results and answer the initial question
