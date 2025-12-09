@@ -3,6 +3,8 @@
 library(tidyverse)
 library(lubridate)
 library(ggplot2)
+library(RColorBrewer)
+library(viridis)
 library(hms)
 
 #' Cleaning the Initial Data
@@ -30,7 +32,7 @@ clean_data <- function(full_data,
            type_of_time = as.POSIXct(eval(as.name(type_of_time)), format = "%Y-%m-%d %H:%M:%S", tz = "EST"),
            Time = type_of_time)
   
-  #check to see if finding the trasfers for a specific date or for a day of the week
+  #check to see if finding the transfers for a specific date or for a day of the week
   if(day %in% c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")){
     #filter to the specified day of the week
     cleaned_data <- cleaned_data %>%

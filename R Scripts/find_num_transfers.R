@@ -82,9 +82,11 @@ route_transfers <- function(df_by_day, route_num_vector, window_transfer = 15, f
         }
       }
     }
+    
+    from_now <- ifelse(from, "From", "To")
 
     #call the plotting function on the results data frame
-    res <- plotting_transfers(res_df, day, route_num_vector, from_or_to = "From")
+    res <- plotting_transfers(res_df, day, route_num_vector, from_or_to = from_now)
   }
   #return the results plot
   return(res)

@@ -68,7 +68,7 @@ sapply(otp_long_ltd$Route, clean_data)
 mon_rt11_transf_plot <- clean_data(otp_long_ltd,
                                    type_of_time = "Actual.Arrival.Time", 
                                    day = "Monday", 
-                                   route_number = c(10, 11), 
+                                   route_number = c(65, 10), 
                                    transfer_wait_time = 15, 
                                    from_to = TRUE)
 
