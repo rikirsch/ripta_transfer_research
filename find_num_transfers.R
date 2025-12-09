@@ -23,8 +23,8 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
   #subset the route on the given day
   route_df <- df_by_day[df_by_day$Route == route_num, ]
   
-  #if the route runs on this day
-  if(is.null(route_df)){
+  #if the route does not run on this day
+  if(length(route_df$Route) == 0){
     res_df <- df_by_day %>%
       filter(Route == route_num) %>%
       select(c(Route, Stop, Stop.Sequence, Time, StopLat, StopLng)) %>%
@@ -85,30 +85,6 @@ route_transfers <- function(df_by_day, route_num, window_transfer = 15, from = T
   #return the results plot
   return(res)
 }
-
-#Steps:
-# 1. How do I find days of the week?
-  # - I don't need to worry about this yet, I can just filter by one date and try this on the one date first
-# 2. How do I add the transfer time window to the current format of time?
- # - Clean data first to mutate scheduled time to be in date time with format
- # "%Y-%m-%d %H:%M:%S"
- # - use the minute function to add or subtract the window in this script
-# 3. How do I check for the possible transfers/am I checking the indexing right?
- # - use the filter! how you store it will decide how the indexing works (?)
-# 4. How do I store the number of transfers?
- # - group by the variables of interest and then summarize, 
- # then calculate the number of transfers by finding the length of the filtered df
-# 5. How do I compare transfers to the stop to transfers from the stop?
- # - add a param from = TRUE to default to showing the num transfers from this stop/route
- # this can be specified to from = FALSE to show the num transfers to this stop/route
-# 7. Change the data cleaning to call the time col of interest Time so that way you
-# this way you can specify if you want to look at the scheduled times or the actual arrival times in the data
- # - needed to use the eval(as.name(type_of_time)) function but it works!
-# 8. Add a function called avg_arrival_time in a new script Estimation.R 
- # - function will find the avg arrival time for each route, stop, day, time over the course of the month
- # - this output/res can be used as the Time col for the num transfers input
- # - THIS is not done in its own function, instead it is done in the prepare_data Script
- # under the clean_data function
 
 # 9. Plotting/Comparing/using this to answer a question
  # - check out the updated df with lat and long data

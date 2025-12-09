@@ -23,11 +23,35 @@
 # #(day of week and actual arrival time)
 # res_act_mon_transfers <- route_transfers(act_mon_df, route_num = 10)
 
+
+#The following commented out chunk of code no longer runs because
+#I have updated the data structure of my program and the dependence between scripts
+
 #Run the data cleaning function and the transfer calculator function on the csv
 #with latitude and longitudinal data
 otp_long_ltd <- read.csv('/Users/rachelkirsch/Downloads/1560FinalProject/otp_sim_lat_long.csv')
-ripta_df_long_lat <- clean_data(otp_long_ltd, "Actual.Arrival.Time", "Thursday")
-res_long_lat <- route_transfers(ripta_df_long_lat, route_num = 10, from = FALSE, day = "Thursday")
+# ripta_df_long_lat <- clean_data(otp_long_ltd, "Actual.Arrival.Time", "Thursday")
+# res_long_lat <- route_transfers(ripta_df_long_lat, route_num = 10, from = FALSE, day = "Thursday")
+# 
+# sun_ripta_df_long_lat <- clean_data(otp_long_ltd, "Actual.Arrival.Time", "Sunday")
+# sun_route_transfers(ripta_df_long_lat, route_num = 10, from = FALSE, day = "Sunday")
+# 
+# mon_ripta_df_long_lat <- clean_data(otp_long_ltd, "Actual.Arrival.Time", "Monday")
+# mon_route_transfers(ripta_df_long_lat, route_num = 10, from = FALSE, day = "Sunday")
 
-ripta_df_long_lat <- clean_data(otp_long_ltd, "Actual.Arrival.Time", "Saturday")
-route_transfers(ripta_df_long_lat, route_num = 10, from = FALSE, day = "Saturday")
+
+
+#Running the clean_data function now that it calls route_transfers which calls plotting_transfers
+clean_data(otp_long_ltd,
+          type_of_time = "Actual.Arrival.Time", 
+          day = "Tuesday", 
+          route_number = 10, 
+          transfer_wait_time = 15, 
+          from_to = TRUE)
+
+clean_data(otp_long_ltd,
+           type_of_time = "Actual.Arrival.Time", 
+           day = "Sunday", 
+           route_number = 10, 
+           transfer_wait_time = 15, 
+           from_to = TRUE)

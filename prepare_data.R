@@ -1,4 +1,5 @@
 #source(find_num_transfers)
+#source(Plotting)
 library(tidyverse)
 library(lubridate)
 library(ggplot2)
@@ -16,7 +17,12 @@ library(hms)
 #' @param day chr, the date that the number of transfers is calculated for
 #' @return cleaned_data dataframe of polished and complete bus routes used to 
 #' calculate the number of transfers for the bus route on the specified day
-clean_data <- function(full_data, type_of_time, day){
+clean_data <- function(full_data, 
+                       type_of_time, 
+                       day, 
+                       route_number, 
+                       transfer_wait_time = 15, 
+                       from_to = TRUE){
   cleaned_data <- full_data %>%
     #mutate all dates and times as needed
     mutate(Date = as.Date(Date),
@@ -48,7 +54,12 @@ clean_data <- function(full_data, type_of_time, day){
     summarize(Time = as.POSIXct(as_hms(mean(Time))))    %>%
     ungroup()
    
-  return(cleaned_data)
+  #return(cleaned_data)
+  res <- route_transfers(cleaned_data,
+                         route_number,
+                         transfer_wait_time,
+                         from = from_to, day)
+  return(res)
 }
 
 #I want to group by every 20 minutes instead of every hour to try and account for some of the weird grouping that is happening
